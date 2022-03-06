@@ -43,8 +43,11 @@ class FashionMnistDataset(Dataset):
 
     def _preprocess(self, x, y):
         x_preprocessed = x[..., np.newaxis].astype(np.float32) / 255
-        y_onehot = np.eye(self.n_classes)[y]
+        y_onehot = self.labels_to_onehot(y)
         return x_preprocessed, y_onehot
+
+    def labels_to_onehot(self, y):
+        return np.eye(self.n_classes)[y]
 
     def get_train(self) -> Tuple[np.ndarray, np.ndarray]:
         return self.x_train, self.y_train_onehot
