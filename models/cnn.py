@@ -1,6 +1,7 @@
 from tensorflow.keras import Model
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, Dense, Dropout, Flatten, InputLayer, MaxPooling2D
+from tensorflow.python.keras.models import load_model
 
 from models.base import ModelProvider
 
@@ -22,3 +23,9 @@ class CnnModelProvider(ModelProvider):
             Dense(10, activation='softmax')
         ])
         return model
+
+
+class TrainedModelProvider(ModelProvider):
+
+    def get_model(self) -> Model:
+        return load_model('../weights/classifier')
