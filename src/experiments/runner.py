@@ -43,13 +43,13 @@ class ExperimentRunner:
 
     def run_experiments_generations(self):
         parameters = [
-            GAParameters(generations=20,
-                         population_size=10,
+            GAParameters(generations=40,
+                         population_size=30,
                          mutation_probability=0.8,
                          mutation_num_genes=3,
                          crossover_probability=0.2)
         ]
-        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats = runner.run_experiments(parameters, repetitions=10, verbose=True, train_samples=10, test_samples=10)
         stats.save('../experiments/', file_prefix='generations')
 
     def run_experiments_popsize(self):
@@ -79,14 +79,34 @@ class ExperimentRunner:
         stats.save('../experiments/', file_prefix='mutation_prob')
 
     def run_experiments_mutation_num_genes(self):
-        pass
+        parameters = []
+        for num_genes in range(0, 21, 2):
+            params = GAParameters(generations=20,
+                                  population_size=10,
+                                  mutation_probability=0.8,
+                                  mutation_num_genes=num_genes,
+                                  crossover_probability=0.2)
+            parameters.append(params)
+
+        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats.save('../experiments/', file_prefix='mutation_numgenes')
 
     def run_experiments_crossover_prob(self):
-        pass
+        parameters = []
+        for crossover_prob in [x / 10.0 for x in range(0, 11)]:
+            params = GAParameters(generations=20,
+                                  population_size=10,
+                                  mutation_probability=0.8,
+                                  mutation_num_genes=3,
+                                  crossover_probability=crossover_prob)
+            parameters.append(params)
+
+        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats.save('../experiments/', file_prefix='mutation_numgenes')
 
 
 if __name__ == "__main__":
     runner = ExperimentRunner()
-    runner.run_experiments_mutation_prob()
+    runner.run_experiments_generations()
 
     # loaded = ExperimentStats.load('experiments/')
