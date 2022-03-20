@@ -1,13 +1,15 @@
+import os
+import pickle
 from typing import List
 
 from pygad import pygad
 
-from attacks.ga import get_fitness_func, get_mutation_func, initialize_population, \
-    on_generation
+from attacks.ga import get_fitness_func, get_mutation_func, initialize_population
 from datasets.reduced import ReducedDataset
 from models.base import ModelProvider
 from models.cnn import TrainedModelProvider
 from train import Dataset, FashionMnistDataset
+from utils.paths import get_timestamped_string
 
 
 class GAParameters:
@@ -52,7 +54,8 @@ class Experiment:
                       num_parents_mating=int(params.population_size * params.mating_parents_portion),
                       keep_parents=5,
                       parent_selection_type="sss",
-                      fitness_func=get_fitness_func(self.x_train[..., 0], self.model, params.adversarial_class, num_classes=10),
+                      fitness_func=get_fitness_func(self.x_train[..., 0], self.model, params.adversarial_class,
+                                                    num_classes=10),
                       gene_type=float,
                       allow_duplicate_genes=True,
                       save_solutions=True)
@@ -80,8 +83,17 @@ class ExperimentStats:
     def add_experiment(self, experiment: Experiment):
         self.experiments.append(experiment)
 
-    def save(self, file_path) -> None:
-        pass
+    def save(self, folder) -> None:
+        file_name = get_timestamped_string("stats_{}.pkl")
+        file_path = os.path.join(folder, file_name)
+        os.makedirs(folder, exist_ok=True)
+
+        with open(file_path, 'wb') as file:
+            pickle.dump(self.experiments, file)
+
+    @classmethod
+    def load(cls, file_path):
+        return pickle.load(file_path)
 
 
 class ExperimentRunner:
@@ -118,4 +130,6 @@ if __name__ == "__main__":
     ]
     runner = ExperimentRunner()
     stats = runner.run_experiments(parameters, repetitions=3, verbose=True, train_samples=10, test_samples=10)
-    pass
+    stats.save('experiments/')
+
+    # loaded = ExperimentStats.load('experiments/')
