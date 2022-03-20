@@ -1,6 +1,6 @@
-from models.base import ModelProvider
-from train import Dataset
-from pygad import GA
+from src.models.base import ModelProvider
+from src.train import Dataset
+
 
 class AdversarialAttack:
 

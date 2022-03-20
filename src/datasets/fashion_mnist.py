@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
-from datasets.base import Dataset, labels_to_onehot
+from src.datasets.base import Dataset, labels_to_onehot
 
 
 class FashionMnistDataset(Dataset):

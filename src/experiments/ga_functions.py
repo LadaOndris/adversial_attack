@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from datasets.base import labels_to_onehot
+from src.datasets.base import labels_to_onehot
 
 
 def img2chromosome(img_arr):

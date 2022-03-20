@@ -1,15 +1,10 @@
-import os
-import pickle
 from typing import List
 
 from pygad import pygad
 
-from attacks.ga import get_fitness_func, get_mutation_func, initialize_population
-from datasets.reduced import ReducedDataset
-from models.base import ModelProvider
-from models.cnn import TrainedModelProvider
-from train import Dataset, FashionMnistDataset
-from utils.paths import get_timestamped_string
+from src.experiments.ga_functions import get_fitness_func, get_mutation_func, initialize_population
+from src.models.base import ModelProvider
+from src.train import Dataset
 
 
 class GAParameters:
@@ -73,63 +68,3 @@ class Experiment:
 
     def _add_result(self, result: ExperimentResult):
         self.results.append(result)
-
-
-class ExperimentStats:
-
-    def __init__(self):
-        self.experiments = []
-
-    def add_experiment(self, experiment: Experiment):
-        self.experiments.append(experiment)
-
-    def save(self, folder) -> None:
-        file_name = get_timestamped_string("stats_{}.pkl")
-        file_path = os.path.join(folder, file_name)
-        os.makedirs(folder, exist_ok=True)
-
-        with open(file_path, 'wb') as file:
-            pickle.dump(self.experiments, file)
-
-    @classmethod
-    def load(cls, file_path):
-        return pickle.load(file_path)
-
-
-class ExperimentRunner:
-
-    def __init__(self):
-        pass
-
-    def run_experiments(self, parameters: List[GAParameters], repetitions: int = 5,
-                        train_samples: int = 100, test_samples: int = 100, verbose: bool = False) -> ExperimentStats:
-        stats = ExperimentStats()
-        dataset = ReducedDataset(FashionMnistDataset(), train_samples, 0, test_samples)
-        model_provider = TrainedModelProvider()
-
-        if verbose:
-            print("Running experiments...")
-        for param_idx, run_params in enumerate(parameters):
-            if verbose:
-                print(F"Running experiment {param_idx + 1}/{len(parameters)}")
-            experiment = Experiment(run_params, model_provider, dataset)
-            for repetition_num in range(repetitions):
-                if verbose:
-                    print(F"...repetition {repetition_num + 1}/{repetitions}")
-                experiment.run_experiment()
-            stats.add_experiment(experiment)
-
-        if verbose:
-            print("Experiments finished.")
-        return stats
-
-
-if __name__ == "__main__":
-    parameters = [
-        GAParameters(population_size=10, mutation_probability=0.8, mutation_num_genes=3, crossover_probability=0.2)
-    ]
-    runner = ExperimentRunner()
-    stats = runner.run_experiments(parameters, repetitions=3, verbose=True, train_samples=10, test_samples=10)
-    stats.save('experiments/')
-
-    # loaded = ExperimentStats.load('experiments/')

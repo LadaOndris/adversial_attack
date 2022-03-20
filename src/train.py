@@ -5,10 +5,10 @@ from tensorflow.keras.metrics import CategoricalAccuracy
 from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 
-from datasets.base import Dataset
-from datasets.fashion_mnist import FashionMnistDataset
-from models.base import ModelProvider
-from models.cnn import CnnModelProvider
+from src.datasets.base import Dataset
+from src.datasets.fashion_mnist import FashionMnistDataset
+from src.models.base import ModelProvider
+from src.models.cnn import CnnModelProvider
 
 
 class Trainer:

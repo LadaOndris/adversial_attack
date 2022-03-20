@@ -3,7 +3,7 @@ from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Conv2D, Dense, Dropout, Flatten, InputLayer, MaxPooling2D
 from tensorflow.python.keras.models import load_model
 
-from models.base import ModelProvider
+from src.models.base import ModelProvider
 
 
 class CnnModelProvider(ModelProvider):
@@ -28,4 +28,4 @@ class CnnModelProvider(ModelProvider):
 class TrainedModelProvider(ModelProvider):
 
     def get_model(self) -> Model:
-        return load_model('../weights/classifier')
+        return load_model('../../weights/classifier')

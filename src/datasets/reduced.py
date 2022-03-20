@@ -2,7 +2,7 @@ from typing import Tuple
 
 import numpy as np
 
-from datasets.base import Dataset
+from src.datasets.base import Dataset
 
 
 class ReducedDataset(Dataset):
