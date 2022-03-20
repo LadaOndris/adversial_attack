@@ -28,7 +28,15 @@ def initialize_population(sol_per_pop, num_genes, low, high):
     return population
 
 
-def get_fitness_func(x_train, model, adversarial_class: int, num_classes: int):
+def compute_perturbation_size(perturbation: np.ndarray, pm1: float, pm2: float):
+    coeff = - np.abs(perturbation) * pm1 + pm2
+    size_per_pixel = 1 / (1 + np.exp(coeff)) - 1 / (1 + np.exp(pm2))
+    size = np.sum(size_per_pixel)
+    return size
+
+
+def get_fitness_func(x_train, model, adversarial_class: int, num_classes: int, perturbation_importance: float,
+                     pm1: float, pm2: float):
     def fitness_func(solution, solution_idx):
         perturbations = chromosome2img(solution, (28, 28))
         adversarials = x_train + perturbations
@@ -36,7 +44,9 @@ def get_fitness_func(x_train, model, adversarial_class: int, num_classes: int):
         adversarial_labels = np.full(shape=adversarials.shape[0], fill_value=adversarial_class)
         adversarial_labels = labels_to_onehot(adversarial_labels, num_classes)
         loss, accuracy = model.evaluate(adversarials, adversarial_labels, verbose=0)
-        return 1 / (loss + 0.000001)
+        perturbation_size = compute_perturbation_size(perturbations, pm1, pm2)
+        # Fitness is being maximized, while loss minimized.
+        return 1 / (loss + perturbation_importance * perturbation_size + 0.000001)
 
     return fitness_func
 
