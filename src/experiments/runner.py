@@ -41,14 +41,52 @@ class ExperimentRunner:
 
         return stats
 
+    def run_experiments_generations(self):
+        parameters = [
+            GAParameters(generations=20,
+                         population_size=10,
+                         mutation_probability=0.8,
+                         mutation_num_genes=3,
+                         crossover_probability=0.2)
+        ]
+        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats.save('../experiments/', file_prefix='generations')
+
+    def run_experiments_popsize(self):
+        parameters = []
+        for popsize in range(10, 101, 10):
+            params = GAParameters(generations=20,
+                                  population_size=popsize,
+                                  mutation_probability=0.8,
+                                  mutation_num_genes=3,
+                                  crossover_probability=0.2)
+            parameters.append(params)
+
+        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats.save('../experiments/', file_prefix='popsize')
+
+    def run_experiments_mutation_prob(self):
+        parameters = []
+        for mutation_prob in [x / 10.0 for x in range(0, 11)]:
+            params = GAParameters(generations=20,
+                                  population_size=10,
+                                  mutation_probability=mutation_prob,
+                                  mutation_num_genes=3,
+                                  crossover_probability=0.2)
+            parameters.append(params)
+
+        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats.save('../experiments/', file_prefix='mutation_prob')
+
+    def run_experiments_mutation_num_genes(self):
+        pass
+
+    def run_experiments_crossover_prob(self):
+        pass
+
 
 if __name__ == "__main__":
-    parameters = [
-        GAParameters(generations=20, population_size=10, mutation_probability=0.8, mutation_num_genes=3,
-                     crossover_probability=0.2)
-    ]
     runner = ExperimentRunner()
-    stats = runner.run_experiments(parameters, repetitions=3, verbose=True, train_samples=10, test_samples=10)
-    stats.save('experiments/')
+    runner.run_experiments_mutation_prob()
 
     # loaded = ExperimentStats.load('experiments/')
