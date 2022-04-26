@@ -43,7 +43,7 @@ def get_fitness_func(x_train, model, adversarial_class: int, num_classes: int, p
         adversarials = adversarials[..., np.newaxis]
         adversarial_labels = np.full(shape=adversarials.shape[0], fill_value=adversarial_class)
         adversarial_labels = labels_to_onehot(adversarial_labels, num_classes)
-        loss, accuracy = model.evaluate(adversarials, adversarial_labels, verbose=0)
+        loss, accuracy = model.evaluate(adversarials, adversarial_labels, verbose=1)
         perturbation_size = compute_perturbation_size(perturbations, pm1, pm2)
         # Fitness is being maximized, while loss minimized.
         return 1 / (loss + perturbation_importance * perturbation_size + 0.000001)

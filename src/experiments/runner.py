@@ -9,8 +9,9 @@ from src.models.cnn import TrainedModelProvider
 
 class ExperimentRunner:
 
-    def __init__(self):
-        pass
+    def __init__(self, train_samples: int, test_samples: int):
+        self.train_samples = train_samples
+        self.test_samples = test_samples
 
     def run_experiments(self, parameters: List[GAParameters], repetitions: int = 5,
                         train_samples: int = 100, test_samples: int = 100, verbose: bool = False) -> ExperimentStats:
@@ -43,70 +44,79 @@ class ExperimentRunner:
 
     def run_experiments_generations(self):
         parameters = [
-            GAParameters(generations=40,
+            GAParameters(generations=60,
                          population_size=30,
                          mutation_probability=0.8,
                          mutation_num_genes=3,
                          crossover_probability=0.2)
         ]
-        stats = runner.run_experiments(parameters, repetitions=10, verbose=True, train_samples=10, test_samples=10)
+        stats = runner.run_experiments(parameters, repetitions=10, verbose=True,
+                                       train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='generations')
 
     def run_experiments_popsize(self):
         parameters = []
         for popsize in range(10, 101, 10):
-            params = GAParameters(generations=20,
+            params = GAParameters(generations=40,
                                   population_size=popsize,
                                   mutation_probability=0.8,
                                   mutation_num_genes=3,
                                   crossover_probability=0.2)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+                                       train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='popsize')
 
     def run_experiments_mutation_prob(self):
         parameters = []
         for mutation_prob in [x / 10.0 for x in range(0, 11)]:
-            params = GAParameters(generations=20,
+            params = GAParameters(generations=40,
                                   population_size=10,
                                   mutation_probability=mutation_prob,
                                   mutation_num_genes=3,
                                   crossover_probability=0.2)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+                                       train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='mutation_prob')
 
     def run_experiments_mutation_num_genes(self):
         parameters = []
         for num_genes in range(0, 21, 2):
-            params = GAParameters(generations=20,
+            params = GAParameters(generations=40,
                                   population_size=10,
                                   mutation_probability=0.8,
                                   mutation_num_genes=num_genes,
                                   crossover_probability=0.2)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
+        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+                                       train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='mutation_numgenes')
 
     def run_experiments_crossover_prob(self):
         parameters = []
         for crossover_prob in [x / 10.0 for x in range(0, 11)]:
-            params = GAParameters(generations=20,
+            params = GAParameters(generations=40,
                                   population_size=10,
                                   mutation_probability=0.8,
                                   mutation_num_genes=3,
                                   crossover_probability=crossover_prob)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=2, verbose=True, train_samples=10, test_samples=10)
-        stats.save('../experiments/', file_prefix='mutation_numgenes')
+        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+                                       train_samples=self.train_samples, test_samples=self.test_samples)
+        stats.save('../experiments/', file_prefix='crossover_prob')
 
 
 if __name__ == "__main__":
-    runner = ExperimentRunner()
+    runner = ExperimentRunner(train_samples=100, test_samples=100)
     runner.run_experiments_generations()
+    runner.run_experiments_popsize()
+    runner.run_experiments_mutation_prob()
+    runner.run_experiments_mutation_num_genes()
+    runner.run_experiments_crossover_prob()
 
     # loaded = ExperimentStats.load('experiments/')

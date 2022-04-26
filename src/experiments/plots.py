@@ -7,6 +7,13 @@ import numpy as np
 from src.experiments.stats import ExperimentStats
 
 
+def show_save_fig(fig, show: bool, save_path: str = None):
+    if save_path is not None:
+        fig.savefig(save_path)
+    if show:
+        fig.show()
+
+
 def latest_file_with_prefix(pattern: str):
     list_of_files = glob.glob(pattern)
     latest_file = max(list_of_files, key=os.path.getctime)
@@ -20,7 +27,7 @@ def get_stats(pattern: str):
     return stats
 
 
-def boxplot(pattern: str):
+def boxplot(pattern: str, save_path: str):
     stats = get_stats(pattern)
     records_dict = {}
     # for each record, extract fitness of each result
@@ -39,10 +46,29 @@ def boxplot(pattern: str):
     ax.set_xlabel("Parameters")
     ax.set_ylabel("Fitness")
     fig.tight_layout()
-    fig.show()
+    show_save_fig(fig, show=True, save_path=save_path)
 
 
-def plot_fitness_over_generations(pattern: str):
+def boxplot_popsize(pattern: str, save_path: str):
+    stats = get_stats(pattern)
+    records_dict = {}
+    # for each record, extract fitness of each result
+    for record in stats.records:
+        fitnesses = [result.best_individuals_fitness[-1] for result in record.results]
+        popsize = record.params.population_size
+        records_dict[popsize] = fitnesses
+
+    fig, ax = plt.subplots()
+    # ax.set_title('')
+    ax.boxplot(records_dict.values())
+    ax.set_xticklabels(records_dict.keys(), rotation=90)
+    ax.set_xlabel("Population size")
+    ax.set_ylabel("Fitness")
+    fig.tight_layout()
+    show_save_fig(fig, show=True, save_path=save_path)
+
+
+def plot_fitness_over_generations(pattern: str, save_path: str):
     stats = get_stats(pattern)
 
     if len(stats.records) > 1:
@@ -60,9 +86,13 @@ def plot_fitness_over_generations(pattern: str):
     ax.set_xlabel("Generations")
     ax.set_ylabel("Average Fitness")
     fig.tight_layout()
-    fig.show()
+    show_save_fig(fig, show=True, save_path=save_path)
 
 
 if __name__ == "__main__":
     # boxplot('../experiments/mutation_prob*')
-    plot_fitness_over_generations('../experiments/generations*')
+    # plot_fitness_over_generations('../experiments/generations*', '../docs/generations.pdf')
+    boxplot_popsize('../experiments/popsize*', '../docs/popsize.pdf')
+    boxplot('../experiments/mutation_prob*', '../docs/mutation_prob.pdf')
+    boxplot('../experiments/mutation_numgenes*', '../docs/mutation_numgenes.pdf')
+    boxplot('../experiments/crossover_prob*', '../docs/crossover_prob.pdf')
