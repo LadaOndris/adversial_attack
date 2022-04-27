@@ -9,9 +9,10 @@ from src.models.cnn import TrainedModelProvider
 
 class ExperimentRunner:
 
-    def __init__(self, train_samples: int, test_samples: int):
+    def __init__(self, train_samples: int, test_samples: int, repetitions_per_experiment: int):
         self.train_samples = train_samples
         self.test_samples = test_samples
+        self.repetitions = repetitions_per_experiment
 
     def run_experiments(self, parameters: List[GAParameters], repetitions: int = 5,
                         train_samples: int = 100, test_samples: int = 100, verbose: bool = False) -> ExperimentStats:
@@ -48,23 +49,27 @@ class ExperimentRunner:
                          population_size=30,
                          mutation_probability=0.8,
                          mutation_num_genes=3,
-                         crossover_probability=0.2)
+                         crossover_probability=0.2,
+                         perturbation_importance=0.05)
         ]
-        stats = runner.run_experiments(parameters, repetitions=10, verbose=True,
+        stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='generations')
 
     def run_experiments_popsize(self):
         parameters = []
+        base_generation_size = 400
         for popsize in range(10, 101, 10):
-            params = GAParameters(generations=40,
+            generations = int(base_generation_size / popsize)
+            params = GAParameters(generations=generations,
                                   population_size=popsize,
                                   mutation_probability=0.8,
                                   mutation_num_genes=3,
-                                  crossover_probability=0.2)
+                                  crossover_probability=0.2,
+                                  perturbation_importance=0.05)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+        stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='popsize')
 
@@ -75,10 +80,11 @@ class ExperimentRunner:
                                   population_size=10,
                                   mutation_probability=mutation_prob,
                                   mutation_num_genes=3,
-                                  crossover_probability=0.2)
+                                  crossover_probability=0.2,
+                                  perturbation_importance=0.05)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+        stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='mutation_prob')
 
@@ -89,10 +95,11 @@ class ExperimentRunner:
                                   population_size=10,
                                   mutation_probability=0.8,
                                   mutation_num_genes=num_genes,
-                                  crossover_probability=0.2)
+                                  crossover_probability=0.2,
+                                  perturbation_importance=0.05)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+        stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='mutation_numgenes')
 
@@ -103,16 +110,17 @@ class ExperimentRunner:
                                   population_size=10,
                                   mutation_probability=0.8,
                                   mutation_num_genes=3,
-                                  crossover_probability=crossover_prob)
+                                  crossover_probability=crossover_prob,
+                                  perturbation_importance=0.05)
             parameters.append(params)
 
-        stats = runner.run_experiments(parameters, repetitions=5, verbose=True,
+        stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
         stats.save('../experiments/', file_prefix='crossover_prob')
 
 
 if __name__ == "__main__":
-    runner = ExperimentRunner(train_samples=100, test_samples=100)
+    runner = ExperimentRunner(train_samples=100, test_samples=100, repetitions_per_experiment=30)
     runner.run_experiments_generations()
     runner.run_experiments_popsize()
     runner.run_experiments_mutation_prob()

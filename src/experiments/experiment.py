@@ -12,7 +12,7 @@ from src.train import Dataset
 class GAParameters:
 
     def __init__(self, generations, population_size, mutation_probability,
-                 mutation_num_genes, crossover_probability, perturbation_importance=1, pm1=10, pm2=5.8):
+                 mutation_num_genes, crossover_probability, perturbation_importance=0.1, pm1=10, pm2=5.8):
         self.generations = generations
         self.population_size = population_size
         self.mutation_probability = mutation_probability
