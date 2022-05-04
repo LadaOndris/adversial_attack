@@ -54,7 +54,7 @@ class ExperimentRunner:
         ]
         stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
-        stats.save('../experiments/', file_prefix='generations')
+        stats.save('experiments/', file_prefix='generations')
 
     def run_experiments_popsize(self):
         parameters = []
@@ -71,7 +71,7 @@ class ExperimentRunner:
 
         stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
-        stats.save('../experiments/', file_prefix='popsize')
+        stats.save('experiments/', file_prefix='popsize')
 
     def run_experiments_mutation_prob(self):
         parameters = []
@@ -86,7 +86,7 @@ class ExperimentRunner:
 
         stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
-        stats.save('../experiments/', file_prefix='mutation_prob')
+        stats.save('experiments/', file_prefix='mutation_prob')
 
     def run_experiments_mutation_num_genes(self):
         parameters = []
@@ -101,7 +101,7 @@ class ExperimentRunner:
 
         stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
-        stats.save('../experiments/', file_prefix='mutation_numgenes')
+        stats.save('experiments/', file_prefix='mutation_numgenes')
 
     def run_experiments_crossover_prob(self):
         parameters = []
@@ -116,7 +116,7 @@ class ExperimentRunner:
 
         stats = runner.run_experiments(parameters, repetitions=self.repetitions, verbose=True,
                                        train_samples=self.train_samples, test_samples=self.test_samples)
-        stats.save('../experiments/', file_prefix='crossover_prob')
+        stats.save('experiments/', file_prefix='crossover_prob')
 
 
 if __name__ == "__main__":

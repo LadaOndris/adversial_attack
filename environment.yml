@@ -100,7 +100,7 @@ dependencies:
   - nettle=3.6=he412f7d_0
   - nspr=4.32=h9c3ff4c_1
   - nss=3.74=hb5efdd6_0
-  - numpy=1.22.2=py38h6ae9a64_0
+  - numpy
   - oauthlib=3.2.0=pyhd8ed1ab_0
   - opencv=4.2.0=py38_5
   - openh264=2.1.1=h780b84a_0
@@ -167,5 +167,3 @@ dependencies:
   - zipp=3.7.0=pyhd8ed1ab_1
   - zlib=1.2.11=h36c2ea0_1013
   - zstd=1.4.9=ha95c52a_0
-  - pip:
-    - pygad==2.16.3

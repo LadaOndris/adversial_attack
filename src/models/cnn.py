@@ -28,4 +28,4 @@ class CnnModelProvider(ModelProvider):
 class TrainedModelProvider(ModelProvider):
 
     def get_model(self) -> Model:
-        return load_model('../weights/classifier')
+        return load_model('weights/classifier')
