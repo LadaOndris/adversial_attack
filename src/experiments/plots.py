@@ -90,9 +90,8 @@ def plot_fitness_over_generations(pattern: str, save_path: str):
 
 
 if __name__ == "__main__":
-    # boxplot('experiments/mutation_prob*')
-    # plot_fitness_over_generations('experiments/generations*', '../docs/generations.pdf')
-    boxplot_popsize('experiments/popsize*', 'docs/popsize.pdf')
-    boxplot('experiments/mutation_prob*', 'docs/mutation_prob.pdf')
-    boxplot('experiments/mutation_numgenes*', 'docs/mutation_numgenes.pdf')
-    boxplot('experiments/crossover_prob*', 'docs/crossover_prob.pdf')
+    plot_fitness_over_generations('experiments/generations*', 'docs/generations.png')
+    boxplot_popsize('experiments/popsize*', 'docs/popsize.png')
+    boxplot('experiments/mutation_prob*', 'docs/mutation_prob.png')
+    boxplot('experiments/mutation_numgenes*', 'docs/mutation_numgenes.png')
+    boxplot('experiments/crossover_prob*', 'docs/crossover_prob.png')
