@@ -28,7 +28,7 @@ genetic algorithm. CoRR, abs/1906.03181, 2019. URL http://arxiv.org/abs/1906.031
 
 ## Experiments results
 
-The results of the experiments can be found in the slides [here](docs/presentation.pdf).
+The results of the experiments can be found in the [slides](docs/presentation.pdf) or the [report](docs/report.pdf).
 
 ## How to run
 Prepare environment:
